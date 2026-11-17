@@ -2745,6 +2745,12 @@ class RRuleTest(unittest.TestCase):
             rrulestr("DTSTART;TZID=America/New_York:19970902T090000Z\n"+
                      "RRULE:FREQ=YEARLY;COUNT=3\n")
 
+    def testStrWithoutRRULE(self):
+        with self.assertRaises(ValueError):
+            rrulestr("DTSTART:20200101")
+        with self.assertRaises(ValueError):
+            rrulestr("DTSTART:20200101\n")
+
     def testStrType(self):
         self.assertEqual(isinstance(rrulestr(
                               "DTSTART:19970902T090000\n"

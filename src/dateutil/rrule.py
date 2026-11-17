@@ -1736,12 +1736,14 @@ class _rrulestr:
                 if compatible and dtstart:
                     rset.rdate(dtstart)
                 return rset
-            else:
+            elif rrulevals:
                 return self._parse_rfc_rrule(rrulevals[0],
                                              dtstart=dtstart,
                                              cache=cache,
                                              ignoretz=ignoretz,
                                              tzinfos=tzinfos)
+            else:
+                raise ValueError("No RRULE found")
 
     def __call__(self, s, **kwargs):
         return self._parse_rfc(s, **kwargs)
