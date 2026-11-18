@@ -39,6 +39,11 @@ Added in `tests/test_rrule.py`:
 Prior to the fix:
 `IndexError: list index out of range`
 
+## Solution Approach
+1. **Eliminate Uncaught `IndexError` on Malformed Input:** In `rrulestr()`, when a string contained `DTSTART` (or other lines) without any `RRULE` directive, the parsed `rrule` list remained empty, and popping/indexing `rrules[0]` crashed with a raw `IndexError`.
+2. **Explicit Input Validation with Meaningful Error:** Checked whether any `RRULE` was parsed before indexing in `src/dateutil/rrule.py`, raising a descriptive `ValueError` instead of an internal `IndexError`—matching `rrulestr`'s documented error contract.
+3. **TDD & Regression Safety:** Added `testStrWithoutRRULE` in `tests/test_rrule.py` verifying `ValueError` is raised cleanly with and without trailing newlines.
+
 ## 4. Solution & Code Changes
 In `src/dateutil/rrule.py`:
 - Updated the `else` branch to `elif rrulevals:` before parsing `rrulevals[0]`.
